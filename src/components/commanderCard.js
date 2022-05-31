@@ -6,9 +6,18 @@ function CommanderCard({ card, number, onClick }) {
         <Col sm>
             <Card 
                 hoverable
-                onClick={() => onClick(number)}
+                onClick={() => onClick(number, card)}
+                className={
+                    `enabled${card.selectedBy} ${card.disabledBy > 0 ? 'disabled' : 'enabled'}`
+                }
             >
-                <Card.Body>{card.name}</Card.Body>
+                <Card.Body>
+                    <Card.Title>{card.name}</Card.Title>
+                    <Card.Text>
+                        Disabled By: {card.disabledBy} 
+                        Selected By: {card.selectedBy}
+                    </Card.Text>
+                </Card.Body>
             </Card>
         </Col>
     )
