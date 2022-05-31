@@ -6,7 +6,7 @@ export default class CardsStore {
     cardsLoaded = false;
 
     TOTAL_COMMANDER_POOL = 24;
-    
+
     constructor() {
         makeAutoObservable(this);
     }
@@ -18,26 +18,12 @@ export default class CardsStore {
         //grabs a subset
         let commanderPool = this.getRandomSample(fetchedOptions, this.TOTAL_COMMANDER_POOL);
         //transforms subset to match data format
-        commanderPool.map(card => {
-            return {
-                name: card.name,
-                img: 'image',
-                disabledBy: 0,
-                selectedBy: 0
-            }
+        commanderPool = commanderPool.map(card => {
+            return this.poolCard(card);
         });
 
         this.setCards(commanderPool);
         this.setCardsLoaded(true);
-        //required card data
-        // const card = {
-        //     name: 'Test123',
-        //     img: 'image-link',
-        //     disabledBy: 0,
-        //     selectedBy: 0
-        // }
-    
-        // this.cards = Array(this.TOTAL_COMMANDER_POOL).fill(card);
     }
 
     updateCard(index, newCard) {
@@ -49,13 +35,25 @@ export default class CardsStore {
         this.setCards(newCards);
     }
 
-    //private
     setCards(newCards) {
         this.cards = newCards;
     }
 
     setCardsLoaded(cardsLoaded) {
         this.cardsLoaded = cardsLoaded;
+    }
+
+    //private
+    poolCard(card) {
+        const imgLink = card.image_uris?.art_crop 
+        || card.card_faces[0]?.image_uris?.art_crop;
+
+        return {
+            name: card.name,
+            img: imgLink,
+            disabledBy: 0,
+            selectedBy: 0
+        }
     }
 
     getRandomSample(cardList, count) {

@@ -1,11 +1,10 @@
-import { Card, Col } from "react-bootstrap";
+import { Card, Col, Image } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 function CommanderCard({ card, number, onClick }) {
     return (
         <Col sm>
-            <Card 
-                hoverable
+            <Card
                 onClick={() => onClick(number, card)}
                 className={
                     `enabled${card.selectedBy} ${card.disabledBy > 0 ? 'disabled' : 'enabled'}`
@@ -13,6 +12,10 @@ function CommanderCard({ card, number, onClick }) {
             >
                 <Card.Body>
                     <Card.Title>{card.name}</Card.Title>
+                    <Image
+                        src={card.img}
+                        fluid
+                    />
                 </Card.Body>
             </Card>
         </Col>
