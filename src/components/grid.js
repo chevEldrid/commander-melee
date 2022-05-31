@@ -24,7 +24,9 @@ const Grid = observer(({ cardsStore }) => {
     }
 
     return (
-        <Container>
+        !cardsStore.cardsLoaded 
+        ? <p>loading</p>
+        : <Container>
             <Row>
                 {cardsStore.cards.slice(0, 6).map((card, index) => (
                     <CommanderCard 

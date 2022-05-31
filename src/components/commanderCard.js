@@ -13,10 +13,6 @@ function CommanderCard({ card, number, onClick }) {
             >
                 <Card.Body>
                     <Card.Title>{card.name}</Card.Title>
-                    <Card.Text>
-                        Disabled By: {card.disabledBy} 
-                        Selected By: {card.selectedBy}
-                    </Card.Text>
                 </Card.Body>
             </Card>
         </Col>
