@@ -1,6 +1,6 @@
-import Grid from './components/grid';
 import React, { useEffect } from 'react';
 import CardsStore from './stores/CardsStore';
+import Frame from './components/frame';
 
 function App() {
   const cardsStore = new CardsStore();
@@ -13,7 +13,7 @@ function App() {
 
   return (
     <div className="App">
-      <Grid cardsStore={cardsStore}/>
+      <Frame cardsStore={cardsStore}/>
     </div>
   );
 }

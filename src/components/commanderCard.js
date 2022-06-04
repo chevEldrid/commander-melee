@@ -3,11 +3,12 @@ import PropTypes from "prop-types";
 
 function CommanderCard({ card, number, onClick }) {
     return (
-        <Col sm>
+        <Col md="2">
             <Card
-                onClick={() => onClick(number, card)}
+                onClick={() => onClick(number)}
                 className={
-                    `enabled${card.selectedBy} ${card.disabledBy > 0 ? 'disabled' : 'enabled'}`
+                    `enabled${card.selectedBy.slice(-1)[0]} 
+                    ${card.disabledBy > 0 ? 'disabled' : 'enabled'}`
                 }
             >
                 <Card.Body>

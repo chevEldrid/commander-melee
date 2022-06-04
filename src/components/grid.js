@@ -1,26 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import { observer } from "mobx-react";
 import { Container, Row } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import CommanderCard from "./commanderCard";
 
-const Grid = observer(({ cardsStore }) => {
-    const [stage, setStage] = useState(1);
-
-    const cardSelected = (index, card) => {
+const Grid = observer(({ 
+    cardsStore,
+    stage, 
+    setStage 
+}) => {
+    const cardSelected = (index) => {
         //different Card updates based on stage
         //Stage 0 - 3 -> removing particular options
         //Stage 4 - 7 -> Selected Champions
-        let updatedCard = card;
+        let cardSet = false;
         if (stage < 5) {
-            updatedCard = { ...card, disabledBy: stage };
-            setStage(stage + 1);
+            cardSet = cardsStore.disableCard(index, stage);
         } else if (stage < 9) {
-            updatedCard = { ...card, selectedBy: stage - 4 };
-            setStage(stage + 1);
+            cardSet = cardsStore.selectCard(index, stage - 4);
         }
-        cardsStore.updateCard(index, updatedCard);
+        if (cardSet) setStage(stage + 1);
     }
 
     return (
@@ -68,7 +68,9 @@ const Grid = observer(({ cardsStore }) => {
 })
 
 Grid.proptypes = {
-    cardsStore: PropTypes.object.isRequired
+    cardsStore: PropTypes.object.isRequired,
+    stage: PropTypes.number.isRequired,
+    setStage: PropTypes.func.isRequired
 }
 
 export default Grid;
