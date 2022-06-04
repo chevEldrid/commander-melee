@@ -1,4 +1,6 @@
-const BASE_COMMANDER_QUERY = 'q=t%3Alegendary+t%3Acreature+legal%3Acommander'
+//legal:commander is:commander - shorthand for all legal commanders on Scryfall
+const BASE_COMMANDER_QUERY = 'q=legal%3Acommander+is%3Acommander'
+
 //hacky testing variable to avoid too many scryfall requests
 const GET_MORE = true;
 

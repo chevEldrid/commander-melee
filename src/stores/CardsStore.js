@@ -12,13 +12,12 @@ export default class CardsStore {
         makeAutoObservable(this);
     }
 
-    //update to fetch actual data
     async populateCards() {
         //fetches all possible Scryfall options
         const fetchedOptions = await fetchCards();
-        //grabs a subset
+        //grabs a subset of returned Commanders
         let commanderPool = this.getRandomSample(fetchedOptions, this.TOTAL_COMMANDER_POOL);
-        //transforms subset to match data format
+        //transforms subset into smaller data format
         commanderPool = commanderPool.map(card => {
             return this.poolCard(card);
         });
@@ -27,6 +26,8 @@ export default class CardsStore {
         this.setCardsLoaded(true);
     }
 
+    //changes card at given index to given newCard
+    //stackIndex - adds index of card to "undo stack"
     updateCard(index, newCard, stackIndex=true) {
         if (index - 1 > this.cards.length) return;
 
@@ -39,6 +40,7 @@ export default class CardsStore {
         if(stackIndex) this.undoStack.push(index);
     }
 
+    //Adds a given player to 'selectedBy' array on Card
     selectCard(index, player) {
         if (index - 1 > this.cards.length) return false;
 
@@ -50,6 +52,8 @@ export default class CardsStore {
         return true;
     }
 
+    //Adds a given player to 'disabledBy' on a card
+    //multiple players can choose to disable the same card
     disableCard(index, player) {
         if (index - 1 > this.cards.length) return false;
 
@@ -59,6 +63,8 @@ export default class CardsStore {
         return true;
     }
 
+    //removes the last added player to card's 'selectedBy'
+    //removes current player from card 'disabledBy'
     resetCard(index) {
         if (index - 1 > this.cards.length) return;
 
@@ -68,6 +74,7 @@ export default class CardsStore {
         this.updateCard(index, card, false);
     }
 
+    //removes all players from all cards
     resetCards() {
         const reset = this.cards.map(card => {
             return { ...card, selectedBy: [], disabledBy: 0};
@@ -75,6 +82,7 @@ export default class CardsStore {
         this.setCards(reset);
     }
 
+    //resets the card at the last index saved to the undo stack
     undo() {
         if(this.undoStack.length === 0) return;
 
@@ -128,11 +136,14 @@ export default class CardsStore {
         return cardPool;
     }
 
+    //generates the EDHRec Avg Deck url from a Scryfall Name
     generateDeckUrl(name) {
         let cardName = name;
+        //Avg decks are only the first half of a DFC
+        cardName = cardName.split(" // ")[0];
         const regex = /[\s,]+/g;
         const edhRecUrl = 'https://edhrec.com/average-decks/';
-
+        //EDHRec changes all characters between words to hyphens
         cardName = cardName.replaceAll(regex,'-').toLocaleLowerCase();
         return `${edhRecUrl}${cardName}`;
     }
