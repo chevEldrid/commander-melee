@@ -7,10 +7,10 @@ import CommanderCard from "./commanderCard";
 
 const Grid = observer(({ 
     cardsStore,
-    stage, 
-    setStage 
+    gameStore
 }) => {
     const cardSelected = (index) => {
+        const stage = gameStore.stage;
         //different Card updates based on stage
         //Stage 0 - 3 -> removing particular options
         //Stage 4 - 7 -> Selected Champions
@@ -20,7 +20,7 @@ const Grid = observer(({
         } else if (stage < 9) {
             cardSet = cardsStore.selectCard(index, stage - 4);
         }
-        if (cardSet) setStage(stage + 1);
+        if (cardSet) gameStore.updateStage(stage + 1);
     }
 
     return (
@@ -69,8 +69,7 @@ const Grid = observer(({
 
 Grid.proptypes = {
     cardsStore: PropTypes.object.isRequired,
-    stage: PropTypes.number.isRequired,
-    setStage: PropTypes.func.isRequired
+    gameStore: PropTypes.object.isRequired
 }
 
 export default Grid;

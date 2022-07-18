@@ -1,20 +1,21 @@
 import { Button, Row } from "react-bootstrap";
 import PropTypes from "prop-types";
+import { observer } from "mobx-react";
 
-const ButtonRow = ({ 
+const ButtonRow = observer(({ 
     cardsStore,
-    setSelection,
-    setStage, 
-    stage
+    gameStore,
+    setSelection
 }) => {
 
     const clearSelections = () => {
-        setStage(1);
+        gameStore.updateStage(1);
         cardsStore.resetCards();
     }
 
     const chooseRandom = () => {
         const index = Math.floor(Math.random() * cardsStore.TOTAL_COMMANDER_POOL);
+        const stage = gameStore.stage;
         let cardSet = false;
         if (stage < 5) {
             cardSet = cardsStore.disableCard(index, stage);
@@ -22,7 +23,7 @@ const ButtonRow = ({
             cardSet = cardsStore.selectCard(index, stage - 4);
         }
         if (cardSet) {
-            setStage(stage + 1);
+            gameStore.updateStage(stage + 1);
         } else {
             chooseRandom();
         }
@@ -30,7 +31,7 @@ const ButtonRow = ({
 
     const undoSelection = () => {
         cardsStore.undo();
-        setStage(stage - 1);
+        gameStore.updateStage(gameStore.stage - 1);
     }
 
     return (
@@ -54,6 +55,13 @@ const ButtonRow = ({
                 Undo
             </Button>
             <Button
+                variant="primary"
+                onClick={() => gameStore.nextStage()}
+                disabled={!gameStore.canAdvance}
+            >
+                Advance to stage past: {gameStore.stageName}
+            </Button>
+            <Button
                 variant="success"
                 onClick={() => setSelection(false)}
             >
@@ -61,13 +69,12 @@ const ButtonRow = ({
             </Button>
         </Row>
     )
-};
+});
 
 ButtonRow.propTypes = {
     cardsStore: PropTypes.object.isRequired,
-    setSelection: PropTypes.func.isRequired,
-    setStage: PropTypes.func.isRequired,
-    stage: PropTypes.number.isRequired
+    gameStore: PropTypes.object.isRequired,
+    setSelection: PropTypes.func.isRequired
 }
 
 export default ButtonRow;

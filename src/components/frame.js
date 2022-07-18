@@ -5,28 +5,29 @@ import PropTypes from "prop-types";
 import Grid from "./grid";
 import ButtonRow from "./buttonRow";
 import SelectedCommanders from "./selectedCommanders";
+import GameStore from "../stores/GameStore";
 
 const Frame = observer(({ cardsStore }) => {
     const [stage, setStage] = useState(1);
     const [selection, setSelection] = useState(true);
+    const gameStore = new GameStore();
 
     return (
         selection
         ? <Container>
             <Grid
                 cardsStore={cardsStore}
-                stage={stage}
-                setStage={setStage}
+                gameStore={gameStore}
             />
             <ButtonRow
                 cardsStore={cardsStore}
+                gameStore={gameStore}
                 setSelection={setSelection}
-                setStage={setStage}
-                stage={stage}
             />
         </Container>
-        : <SelectedCommanders 
+        : <SelectedCommanders
             selectedCards={cardsStore.selectedCards}
+            setSelection={setSelection}
         />
     )
 });
